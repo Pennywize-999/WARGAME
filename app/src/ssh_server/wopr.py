@@ -163,15 +163,52 @@ class WoprSession:
         lines = [border, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15]
         return "\033[H" + "\r\n".join(lines) + "\r\n> \033[K"
 
+    def _render_auth_screen(self, remaining: int, message: str = "") -> str:
+        """
+        Renders the fixed WOPR CRT terminal authorization layout (62 columns wide, 13 fixed rows).
+        Authorization timer is anchored at Row 2, Column 48 (matching the main countdown position).
+        Cursor is anchored at Row 12, Column 5 (after '> ').
+        """
+        m = max(0, remaining // 60)
+        s = max(0, remaining % 60)
+        timer_str = f"AUTH {m:02d}:{s:02d}"
+
+        border = "+" + "-" * 60 + "+"
+        l2 = f"| W O P R" + " " * 38 + f"{timer_str}      |"
+        l3 = f"| WAR OPERATION PLAN RESPONSE" + " " * 31 + " |"
+        l4 = "|" + " " * 60 + "|"
+        l5 = f"| {'STRATEGIC HEURISTIC COMPLETE':<58} |"
+        l6 = f"| {'PRIMARY LAUNCH OVERRIDE READY':<58} |"
+        l7 = "|" + " " * 60 + "|"
+        l8 = f"| {'AUTHORIZED TERMINAL PHRASE REQUIRED':<58} |"
+        l9 = "|" + " " * 60 + "|"
+        l10 = f"| {'ENTER AUTHORIZED TERMINAL PHRASE:':<58} |"
+        l11 = f"| {message[:58]:<58} |"
+        l12 = f"| {'> ':<58} |"
+        l13 = border
+
+        lines = [border, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13]
+        return "\033[H" + "\r\n".join(lines) + "\033[12;5H"
+
     async def authorization_loop(self):
         """
         Server-authoritative 20-second authorization window.
+        Timer is rendered in-place at Row 2, Column 48 as 'AUTH MM:SS'.
         Enforces exact, case-sensitive phrase: 'CPE 1704 TKS'.
         """
         state = get_state()
         auth_deadline = state.get('auth_deadline', 0) if state else 0
         if auth_deadline == 0:
             auth_deadline = int(time.time()) + 20
+
+        now = int(time.time())
+        rem = max(0, auth_deadline - now)
+        self.stdout.write("\033[2J" + self._render_auth_screen(rem))
+        try:
+            await self.stdout.drain()
+        except Exception:
+            pass
+        last_displayed = rem
 
         read_task = asyncio.create_task(self.stdin.readline())
 
@@ -199,6 +236,19 @@ class WoprSession:
                     "------------------------------------------------------------\r\n", delay=0)
                 trigger_auth_timeout()
                 break
+
+            # In-place display update at Row 2, Column 48
+            if remaining != last_displayed:
+                minutes = max(0, remaining // 60)
+                seconds = max(0, remaining % 60)
+                self.stdout.write(
+                    f"\033[?25l\0337\033[s\033[2;48HAUTH {minutes:02d}:{seconds:02d}\033[u\0338\033[?25h"
+                )
+                try:
+                    await self.stdout.drain()
+                except Exception:
+                    pass
+                last_displayed = remaining
 
             try:
                 line = await asyncio.wait_for(asyncio.shield(read_task), timeout=1.0)
@@ -243,9 +293,15 @@ class WoprSession:
                                          "-- CONNECTION TERMINATED --\r\n")
                     break
                 else:
-                    await self.type_text(
-                        "\r\n** AUTHORIZATION REJECTED: INVALID TERMINAL PHRASE **\r\n"
-                        "\r\nWOPR: ", delay=0)
+                    cur_now = int(time.time())
+                    cur_rem = max(0, auth_deadline - cur_now)
+                    self.stdout.write(self._render_auth_screen(
+                        cur_rem, message="** AUTHORIZATION REJECTED: INVALID TERMINAL PHRASE **"))
+                    try:
+                        await self.stdout.drain()
+                    except Exception:
+                        pass
+                    last_displayed = cur_rem
                     read_task = asyncio.create_task(self.stdin.readline())
 
             except asyncio.TimeoutError:
@@ -392,19 +448,10 @@ class WoprSession:
                             auth_deadline = now + 20
                             solve_final_puzzle(auth_deadline)
                             read_task.cancel()
-                            await self.type_text(
-                                "\r\n------------------------------------------------------------\r\n\r\n"
-                                "TIC-TAC-TOE OUTCOME:\r\n"
-                                "WINNER: X\r\n\r\n"
-                                "STRATEGIC HEURISTIC COMPLETE\r\n\r\n"
-                                "PRIMARY LAUNCH OVERRIDE READY\r\n\r\n"
-                                "AUTHORIZED TERMINAL PHRASE REQUIRED\r\n\r\n"
-                                "AUTHORIZATION WINDOW:\r\n"
-                                "20 SECONDS\r\n\r\n"
-                                "ENTER AUTHORIZED TERMINAL PHRASE:\r\n\r\n"
-                                "------------------------------------------------------------\r\n\r\n"
-                                "WOPR: ", delay=0
-                            )
+                            try:
+                                await read_task
+                            except (asyncio.CancelledError, Exception):
+                                pass
                             await self.authorization_loop()
                             break
 
@@ -484,15 +531,6 @@ class WoprSession:
                 trigger_auth_timeout()
                 return
 
-            await self.type_text(
-                "\r\nCONNECTION ESTABLISHED\r\n\r\n"
-                "------------------------------------------------------------\r\n\r\n"
-                "PRIMARY LAUNCH OVERRIDE ACTIVE\r\n\r\n"
-                "AUTHORIZED TERMINAL PHRASE REQUIRED\r\n\r\n"
-                f"AUTHORIZATION WINDOW REMAINING: {auth_rem} SECONDS\r\n\r\n"
-                "ENTER AUTHORIZED TERMINAL PHRASE:\r\n\r\n"
-                "------------------------------------------------------------\r\n\r\n"
-                "WOPR: ", delay=0)
             await self.authorization_loop()
             return
 
