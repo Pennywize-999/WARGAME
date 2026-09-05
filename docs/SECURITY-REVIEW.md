@@ -34,7 +34,7 @@ All dependencies were verified directly from the production Debian 12 VDI root:
 - **Subsystem Isolation**: SFTP and SCP subsystems are not registered.
 - **Port Forwarding**: Agent forwarding and TCP port forwarding are disabled.
 - **Process Factory**: Client sessions instantiate only `WoprSession`, binding strictly to standard stream I/O.
-- **Credentials**: `JOSHUA / JOSHUA` strictly checked in Python application layer.
+- **Credentials**: Username `JOSHUA` and player access passphrase validated against protected environment configuration (never hardcoded in application layer).
 
 ### Port 2222 (OpenSSH - TryHackMe Platform Maintenance)
 - **Port Binding**: Explicitly bound to `Port 2222`. No binding on port 22.

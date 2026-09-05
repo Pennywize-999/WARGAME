@@ -21,7 +21,14 @@ class WoprSSHServer(asyncssh.SSHServer):
         return True
 
     def validate_password(self, username, password):
-        if username.upper() == 'JOSHUA' and password.upper() == 'JOSHUA':
+        expected_user = "JOSHUA"
+        expected_pass = os.environ.get("WOPR_PASSWORD", "").strip()
+        if not expected_pass:
+            raise asyncssh.DisconnectError(
+                11,
+                "\r\n** AUTHENTICATION CONFIGURATION ERROR **\r\n-- CONNECTION TERMINATED --\r\n"
+            )
+        if username.strip().upper() == expected_user and password.strip().upper() == expected_pass.upper():
             return True
         raise asyncssh.DisconnectError(
             11, 

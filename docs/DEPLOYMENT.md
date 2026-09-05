@@ -18,7 +18,7 @@ This guide details how to build, configure, and deploy the **WARGAME** CTF appli
 3. Configure the network adapter to connect to your preferred test network (e.g., `vboxnet0` with DHCP enabled).
 4. Start the virtual machine.
 5. Watch the VM display: `tty1` will automatically present the retro boot screen and show the dynamically assigned IP address.
-6. Connect to Port 22 with `ssh JOSHUA@<IP>` (Password: `JOSHUA`) to access the game simulation.
+6. Connect to Port 22 with `ssh JOSHUA@<IP>` using the discovered player passphrase to access the game simulation.
 
 ---
 
@@ -50,6 +50,7 @@ The production flag is stored strictly outside the source code, SQLite database,
 ### Example Configuration:
 ```ini
 FLAG=FLAG{EXAMPLE_REPLACE_WITH_YOUR_SECRET_FLAG}
+WOPR_PASSWORD=REPLACE_WITH_WOPR_PASSWORD
 DB_PATH=/opt/wargame/state/wargame.db
 SSH_HOST_KEY=/etc/wargame/ssh_host_key
 WOPR_TYPE_DELAY=0

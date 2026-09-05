@@ -27,7 +27,7 @@ When submitting the appliance to the TryHackMe custom VM upload form, specify:
 | **Administrator Password** | `[Provisioned Password]` | Configured during offline build; never committed to Git |
 
 > [!NOTE]
-> **TCP Port 22 is reserved for CTF Gameplay**: Players connect to Port 22 using player credentials `JOSHUA / JOSHUA` to access the AsyncSSH WOPR simulation terminal. OpenSSH is strictly isolated to Port 2222 and is not part of the challenge attack surface.
+> **TCP Port 22 is reserved for CTF Gameplay**: Players connect to Port 22 using the `JOSHUA` account and the passphrase discovered during the Datanet investigation to access the AsyncSSH WOPR simulation terminal. OpenSSH is strictly isolated to Port 2222 and is not part of the challenge attack surface.
 
 ---
 
@@ -66,8 +66,8 @@ When submitting the appliance to the TryHackMe custom VM upload form, specify:
   - *Answer*: `JOSHUA`
   - *Hint*: Inspect the text files in the `SYSTEM` and `ARCHIVES` directories.
 - **Question 2.2**: What credentials grant access to the W.O.P.R. remote terminal?
-  - *Answer*: `JOSHUA:JOSHUA`
-  - *Hint*: Review Dr. Falken's research notes on login conventions.
+  - *Answer*: `JOSHUA:<WOPR_PASSWORD>`
+  - *Hint*: Review Dr. Falken's research notes on terminal access parameters in the Datanet archives.
 
 ### Task 3: W.O.P.R. Mainframe Access
 *Establish an SSH connection to Port 22 and investigate system functions.*

@@ -24,7 +24,7 @@ ftables) strictly exposes only the intended services:
 
 - **Port 80/tcp (HTTP)**: Seattle Public School District Portal
 - **Port 21/tcp (FTP)**: District Datanet File System (Passive Ports: 30000-30009)
-- **Port 22/tcp (SSH)**: Custom W.O.P.R. / Joshua Terminal (AsyncSSH - No Linux Shell, Player Auth: JOSHUA / JOSHUA)
+- **Port 22/tcp (SSH)**: Custom W.O.P.R. / Joshua Terminal (AsyncSSH - No Linux Shell, Player Account: JOSHUA)
 - **Port 2222/tcp (SSH)**: Dedicated OpenSSH Maintenance Access (Reserved strictly for TryHackMe platform administration; not part of gameplay)
 
 ---
@@ -42,7 +42,7 @@ ftables) strictly exposes only the intended services:
 2. Import WARGAME-1.0.0.ova into VirtualBox or VMware.
 3. Configure the network adapter according to your isolated lab or CTF environment.
 4. Start the VM. The local console displays the 1983-inspired green-phosphor banner and assigned IP address.
-5. Begin reconnaissance from your attacker machine. Player credentials for the WOPR simulation terminal on Port 22 are JOSHUA / JOSHUA.
+5. Begin reconnaissance from your attacker machine. Player access to the WOPR simulation terminal on Port 22 uses the JOSHUA account (passphrase discovered through in-game Datanet investigation).
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment and configuration information.
 

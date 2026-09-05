@@ -106,9 +106,11 @@ Inspect the files across these directories:
    ```
 2. `ARCHIVES/RESEARCH.TXT`:
    ```text
-   RESEARCH NOTES - W.O.P.R. HEURISTIC LEARNING
-   DR. FALKEN HAS CONFIGURED THE SYSTEM LOGON PROTOCOL TO REQUIRE
-   THE USER IDENTITY AS BOTH THE ACCOUNT NAME AND THE PASSPHRASE.
+   RESTRICTED RESEARCH RECORD - DEPT OF DEFENSE / ARPA
+   PROJECT W.O.P.R. HEURISTIC LEARNING & SIMULATION
+   CURRENT TERMINAL ACCESS PARAMETERS:
+   ACCOUNT IDENTITY: JOSHUA
+   ACCESS PASSPHRASE: <WOPR_PASSWORD>
    ```
 3. `SYSTEM/WOPR.TXT`:
    ```text
@@ -124,7 +126,7 @@ Inspect the files across these directories:
 ### Findings Summary:
 - **SSH Target**: Port 22
 - **Username**: `JOSHUA`
-- **Password**: `JOSHUA` (identity used as both account and passphrase)
+- **Password**: `<WOPR_PASSWORD>` (retrieved from `ARCHIVES/RESEARCH.TXT`)
 
 ---
 
@@ -134,7 +136,7 @@ Connect via SSH using the recovered credentials:
 
 ```bash
 ssh JOSHUA@<TARGET_IP>
-# Password: JOSHUA
+# Password: <WOPR_PASSWORD>
 ```
 
 You are greeted by the W.O.P.R. terminal interface:

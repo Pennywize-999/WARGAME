@@ -33,7 +33,7 @@ A fundamental design requirement of the appliance is the strict separation betwe
 | :--- | :--- | :--- | :--- | :--- |
 | `wargame-http.service` | FastAPI + Uvicorn | `80/tcp` | None (Public) | Serves public school district portal and `/secret` |
 | `wargame-ftp.service` | pyftpdlib 2.2.0 | `21/tcp`, `30000-30009/tcp` | `PRINCIPAL:PENCIL` | Chrooted read-only Datanet archive |
-| `wargame-ssh.service` | AsyncSSH 2.24.0 | `22/tcp` | `JOSHUA:JOSHUA` | Player WOPR retro terminal simulation (No Linux shell) |
+| `wargame-ssh.service` | AsyncSSH 2.24.0 | `22/tcp` | `JOSHUA` (wargame.env) | Player WOPR retro terminal simulation (No Linux shell) |
 | `ssh.service` | OpenSSH 9.2p1 | `2222/tcp` | `thmadmin` (Private) | TryHackMe platform administration only |
 | `wargame-console.service` | Custom Bash Banner | `/dev/tty1` | Local Console | Retro green phosphor local VM boot banner |
 
@@ -43,7 +43,7 @@ A fundamental design requirement of the appliance is the strict separation betwe
    - Bound strictly to TCP port 22.
    - Handled entirely in Python by `src.ssh_server.wopr.WoprSession`.
    - No interactive shell, no PTY allocation, no SFTP/SCP, no command execution.
-   - Credentials are fixed to `JOSHUA / JOSHUA`.
+   - Account username is `JOSHUA`; access passphrase is dynamically provisioned in `/etc/wargame/wargame.env` and discovered in-game via Datanet.
 
 2. **OpenSSH Maintenance Service (`2222/tcp`)**:
    - Runs as system `ssh.service` bound strictly to TCP port 2222 (`Port 2222`).
