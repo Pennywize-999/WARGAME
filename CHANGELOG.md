@@ -2,6 +2,10 @@
 
 All notable changes to the WARGAME CTF release are documented in this file.
 
+## [1.0.1] - 2026-09-05
+### Fixed
+- Corrected the pre-built appliance filename in `docs/DEPLOYMENT.md` to `WARGAME-1.0.0.ova`.
+
 ## [1.0.0] - 2026-09-05
 ### Added
 - Complete 1983 WOPR CRT terminal experience over AsyncSSH (Port 22).
