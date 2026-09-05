@@ -1,0 +1,55 @@
+# Operating System & Large VM Images
+build/
+*.ova
+*.vdi
+*.vmdk
+*.iso
+*.qcow2
+*.raw
+*.tar.xz
+*.tar
+*.tar.gz
+*.zip
+
+# Database & Runtime State
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+app/state/*.db
+app/state/*.db-wal
+app/state/*.db-shm
+
+# Secrets & Environment Files
+.env
+*.env
+wargame.env
+!conf/wargame.env.example
+
+# Host & Private Keys
+*ssh_host_key*
+*.key
+*.pem
+*.id_rsa
+
+# Python Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Development & Test Artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
+test_*.py
+scratch/
+*.log

@@ -1,0 +1,7 @@
+﻿[Unit]
+Description=WARGAME Target
+Wants=network-online.target wargame-http.service wargame-ftp.service wargame-ssh.service wargame-console.service
+After=network-online.target
+
+[Install]
+WantedBy=multi-user.target

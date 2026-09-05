@@ -1,0 +1,74 @@
+body {
+    background-color: #000000;
+    color: #33ff33; /* Cyan/green phosphor feel */
+    font-family: "Courier New", Courier, monospace; /* Monospaced typography */
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 20px;
+    /* Subtle CRT effects */
+    text-shadow: 0 0 5px rgba(51, 255, 51, 0.5);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 1px solid #33ff33;
+    padding: 20px;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+    text-align: center;
+    margin: 10px 0;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed #33ff33;
+    margin: 20px 0;
+}
+
+p {
+    margin: 5px 0;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.indent {
+    margin-left: 40px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 5px;
+}
+
+.blink {
+    animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+    50% { opacity: 0; }
+}
+
+/* CRT Scanlines */
+body::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}

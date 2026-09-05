@@ -1,0 +1,28 @@
+------------------------------------------------------------
+SEATTLE PUBLIC SCHOOL DISTRICT
+COMPUTER SERVICES
+------------------------------------------------------------
+
+PROJECT W.O.P.R.
+
+WAR OPERATION PLAN RESPONSE
+
+CLASSIFICATION:
+RESTRICTED
+
+PRIMARY RESEARCHER:
+STEPHEN FALKEN
+
+COMPUTER DESIGNATION:
+JOSHUA
+
+REMOTE TERMINAL:
+ACTIVE
+
+REMOTE ACCESS:
+SSH
+
+PORT:
+22
+
+------------------------------------------------------------

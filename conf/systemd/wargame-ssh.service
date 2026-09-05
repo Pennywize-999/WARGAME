@@ -1,0 +1,21 @@
+﻿[Unit]
+Description=WARGAME WOPR SSH Server
+After=network.target
+
+[Service]
+Type=simple
+User=wargame
+Group=wargame
+WorkingDirectory=/opt/wargame
+EnvironmentFile=/etc/wargame/wargame.env
+ExecStart=/opt/wargame/venv/bin/python3 -m src.ssh_server.server
+Restart=always
+RestartSec=3
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

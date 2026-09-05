@@ -1,0 +1,19 @@
+﻿[Unit]
+Description=WARGAME 1983 Console Experience
+After=network-online.target wargame-http.service wargame-ftp.service wargame-ssh.service
+Wants=network-online.target
+Conflicts=getty@tty1.service
+
+[Service]
+Type=idle
+ExecStart=/opt/wargame/bin/console_banner.sh
+StandardInput=tty
+StandardOutput=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
