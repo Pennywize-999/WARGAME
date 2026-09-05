@@ -4,44 +4,51 @@
 [![Platform: Debian 12](https://img.shields.io/badge/Platform-Debian%2012-red.svg)](docs/ARCHITECTURE.md)
 [![Category: CTF Challenge](https://img.shields.io/badge/Category-Retro%20Computing%20/%20CTF-blue.svg)](docs/TRYHACKME.md)
 
-A retro-computing Capture The Flag (CTF) appliance inspired by the classic 1983 film *WarGames*. 
+A retro-computing Capture The Flag (CTF) appliance inspired by the classic 1983 film *WarGames*.
 
-Players navigate a realistic multi-stage reconnaissance and privilege escalation path: investigating a public school district web portal, exploring an educational dial-up/datanet FTP archive, discovering the secret W.O.P.R. military simulation mainframe, manipulating DEFCON conditions, surviving an intense 7-minute countdown, outplaying the artificial intelligence in Tic-Tac-Toe, and executing a final 20-second launch override to save the world.
+Players navigate a multi-stage reconnaissance and puzzle path: investigating a public school district web portal, exploring an educational Datanet FTP archive, discovering the W.O.P.R. military simulation mainframe, manipulating DEFCON conditions, surviving a 7-minute countdown, outplaying the artificial intelligence in Tic-Tac-Toe, and executing a final 20-second authorization sequence.
 
 ---
 
 ## Challenge Overview
 
-- **Format**: Boot-to-Root / Standalone Challenge Appliance
+- **Format**: Standalone CTF Challenge Appliance
 - **Difficulty**: Easy / Medium
 - **Target Audience**: Security enthusiasts, CTF players, retro-computing fans, students
 - **Primary Skills**: Reconnaissance, Service Enumeration, Protocol Inspection, State Machine Analysis, Retro Terminals
 
 ### Network Topology & Exposed Ports
-Production firewall (`nftables`) strictly exposes only the intended challenge services:
+
+Production firewall (`nftables`) exposes only the intended challenge services:
+
 - **Port 80/tcp (HTTP)**: Seattle Public School District Portal
-- **Port 21/tcp (FTP)**: District Datanet File System (Passive Ports: `30000-30009`)
-- **Port 22/tcp (SSH)**: Custom W.O.P.R. / Joshua Terminal (AsyncSSH - No Linux Shell)
+- **Port 21/tcp (FTP)**: District Datanet File System, passive ports `30000-30009`
+- **Port 22/tcp (SSH)**: Custom W.O.P.R. / Joshua Terminal, AsyncSSH, no Linux shell
 
 ---
 
-## Quickstart (Running the Appliance)
+## Quickstart
 
 ### Prerequisites
+
 - VirtualBox 7.0+ or VMware Workstation/Fusion
-- Kali Linux or any penetration testing distribution
+- Kali Linux or another penetration-testing distribution
 
 ### Deployment
-1. Import `WARGAME.ova` into VirtualBox.
-2. Ensure Network Adapter is configured to **Host-Only** or **NAT Network** (DHCP enabled).
-3. Start the VM. The local console (`tty1`) will display the 1983 green phosphor boot banner showing the VM's assigned IP address.
-4. Begin reconnaissance from your attacker machine.
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed setup and configuration options.
+1. Obtain the official release appliance: `WARGAME-1.0.0.ova`.
+2. Import `WARGAME-1.0.0.ova` into VirtualBox or VMware.
+3. Configure the network adapter according to your isolated lab or CTF environment.
+4. Start the VM. The local console displays the 1983-inspired green-phosphor banner and assigned IP address.
+5. Begin reconnaissance from your attacker machine.
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment and configuration information.
+
+> **Note:** The OVA appliance is distributed separately from this source repository. The repository intentionally does not contain VM disk images or release appliances.
 
 ---
 
-## Documentation Index
+## Documentation
 
 - [Walkthrough (SPOILERS)](docs/WALKTHROUGH.md) - Official step-by-step CTF solution guide.
 - [TryHackMe Room Guide](docs/TRYHACKME.md) - Room structure, task breakdown, hints, and platform considerations.
@@ -51,8 +58,24 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed setup and configuratio
 
 ---
 
+## Release
+
+**Current release:** `v1.0.0`
+
+Official appliance filename:
+
+```text
+WARGAME-1.0.0.ova
+```
+
+Source code and documentation are maintained in this repository. The production appliance and its secret flag are distributed separately.
+
+---
+
 ## Legal & Copyright Disclaimer
 
-**WARGAME** is an original, fan-inspired educational cybersecurity challenge created for learning, historical appreciation, and Capture The Flag competitions. 
+**WARGAME** is an original, fan-inspired educational cybersecurity challenge created for learning, historical appreciation, and Capture The Flag competitions.
 
-This project is **not** an official product and is **not affiliated with, endorsed by, or sponsored by Metro-Goldwyn-Mayer Studios Inc. (MGM), United Artists, or the creators, producers, or copyright holders of the 1983 motion picture *WarGames***. All trademarks, service marks, and trade names referenced are the property of their respective owners. No proprietary motion picture footage, audio clips, proprietary scripts, or commercial assets are included in this repository. All source code, terminal renderings, and text files are original creations.
+This project is **not** an official product and is **not affiliated with, endorsed by, or sponsored by Metro-Goldwyn-Mayer Studios Inc. (MGM), United Artists, or the creators, producers, or copyright holders of the 1983 motion picture *WarGames*.** All trademarks, service marks, and trade names referenced are the property of their respective owners.
+
+No proprietary motion-picture footage, audio clips, screenplay, or commercial assets are included in this repository. The challenge implementation, terminal renderings, interface, and supporting text are original project material.
