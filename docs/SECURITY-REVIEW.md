@@ -15,7 +15,8 @@ All dependencies were verified directly from the production Debian 12 VDI root:
 | **Debian Linux** | 12.15 (Bookworm) | Debian Base Repository | OS Level | Current Debian stable release; security updates applied. |
 | **Linux Kernel** | 6.1.0-52-amd64 | Debian Package | Internal | Long Term Support (LTS) kernel branch. |
 | **Python** | 3.11.2 | Debian Package | Internal | Standard Python runtime for Debian 12. |
-| **AsyncSSH** | 2.24.0 | PyPI (venv) | **Port 22/tcp** | Patched against Terrapin (CVE-2023-48795) & Rogue Extension. |
+| **AsyncSSH** | 2.24.0 | PyPI (venv) | **Port 22/tcp** | Patched against Terrapin (CVE-2023-48795) & Rogue Extension. Custom WOPR simulation. |
+| **OpenSSH** | 9.2p1-2+deb12u3 | Debian Base Repository | **Port 2222/tcp** | Hardened maintenance service; password auth restricted to `thmadmin`. Root login disabled. |
 | **pyftpdlib** | 2.2.0 | PyPI (venv) | **Port 21/tcp** | Hardened; chrooted read-only Datanet root (`perm='elr'`). |
 | **Uvicorn** | 0.52.4 | PyPI (venv) | **Port 80/tcp** | Production ASGI server; reload/debug modes disabled. |
 | **FastAPI** | 0.141.1 | PyPI (venv) | **Port 80/tcp** | Static routing; path traversal protected via Starlette. |
@@ -26,12 +27,22 @@ All dependencies were verified directly from the production Debian 12 VDI root:
 
 ---
 
-## 2. AsyncSSH Security Review
-- **OpenSSH Status**: Masked and disabled (`ssh.service -> /dev/null`, `sshd.service -> /dev/null`, `ssh.socket -> /dev/null`).
+## 2. SSH Architecture & Port Isolation
+
+### Port 22 (AsyncSSH - WOPR Simulation)
 - **Channel Isolation**: No shell execution (`/bin/sh` or `/bin/bash`), no PTY allocation, no command exec channel.
 - **Subsystem Isolation**: SFTP and SCP subsystems are not registered.
 - **Port Forwarding**: Agent forwarding and TCP port forwarding are disabled.
 - **Process Factory**: Client sessions instantiate only `WoprSession`, binding strictly to standard stream I/O.
+- **Credentials**: `JOSHUA / JOSHUA` strictly checked in Python application layer.
+
+### Port 2222 (OpenSSH - TryHackMe Platform Maintenance)
+- **Port Binding**: Explicitly bound to `Port 2222`. No binding on port 22.
+- **Socket Activation**: `ssh.socket` permanently masked to `/dev/null`.
+- **Root Login**: Explicitly disabled (`PermitRootLogin no`).
+- **User Whitelist**: Restricted to `thmadmin` (`AllowUsers thmadmin`).
+- **Authentication**: Global password authentication disabled; permitted solely for `thmadmin`.
+- **Privilege Separation**: Standard OpenSSH privilege separation sandbox enabled.
 
 ---
 

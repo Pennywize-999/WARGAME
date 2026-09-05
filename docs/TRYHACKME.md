@@ -15,6 +15,22 @@ Step back into 1983. In the depths of the Cold War, a curious dial-up explorer d
 
 ---
 
+## TryHackMe VM Upload Specifications
+
+When submitting the appliance to the TryHackMe custom VM upload form, specify:
+
+| Field | Value | Notes |
+| :--- | :--- | :--- |
+| **Access Method** | `SSH` | Platform management access |
+| **Port** | `2222` | Dedicated OpenSSH maintenance port |
+| **Administrator Username** | `thmadmin` | Dedicated maintenance user with sudo permissions |
+| **Administrator Password** | `[Provisioned Password]` | Configured during offline build; never committed to Git |
+
+> [!NOTE]
+> **TCP Port 22 is reserved for CTF Gameplay**: Players connect to Port 22 using player credentials `JOSHUA / JOSHUA` to access the AsyncSSH WOPR simulation terminal. OpenSSH is strictly isolated to Port 2222 and is not part of the challenge attack surface.
+
+---
+
 ## Learning Objectives
 1. **Network Reconnaissance**: Identifying non-standard and custom application services across TCP ports.
 2. **Web Content Discovery**: Locating hidden paths and administrative memos.
@@ -65,6 +81,7 @@ Step back into 1983. In the depths of the Cold War, a curious dial-up explorer d
   - *Answer*: `FLAG{...}` (Configured per deployment)
   - *Hint*: Survive the countdown and win a legitimate game of Tic-Tac-Toe, then enter the authorization phrase within 20 seconds.
 
+
 ---
 
 ## Technical Specifications & Deployment Considerations
@@ -77,5 +94,5 @@ Step back into 1983. In the depths of the Cold War, a curious dial-up explorer d
 - **Network**: DHCP (Single NIC)
 
 ### TryHackMe Platform Compatibility Notes:
-- **Debian 12 Kernel Compatibility**: TryHackMe's automated image ingestion pipeline historically enforced strict compatibility rules designed for Debian 8-10 / Ubuntu LTS cloud images. Debian 12 (Bookworm) uses kernel 6.1 and modern systemd predictable network interface naming (`ens3`/`enp0s3`), which requires standard DHCP client configuration (`systemd-networkd`).
-- **Direct Import**: When importing into TryHackMe as a custom challenge room, ensure the disk image is converted using standard QEMU-IMG tooling (`qemu-img convert -O qcow2 wargame.vdi wargame.qcow2`) with VirtIO network drivers enabled.
+- **Debian 12 Kernel Compatibility**: TryHackMe's automated image ingestion pipeline historically enforced strict compatibility rules designed for Debian 8-10 / Ubuntu LTS cloud images. Debian 12 (Bookworm) uses kernel 6.1 and modern systemd predictable network interface naming (ens3/enp0s3), which requires standard DHCP client configuration (systemd-networkd).
+- **Direct Import**: When importing into TryHackMe as a custom challenge room, ensure the disk image is converted using standard QEMU-IMG tooling (qemu-img convert -O qcow2 wargame.vdi wargame.qcow2) with VirtIO network drivers enabled.

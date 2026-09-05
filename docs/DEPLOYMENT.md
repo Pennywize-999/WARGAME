@@ -18,10 +18,28 @@ This guide details how to build, configure, and deploy the **WARGAME** CTF appli
 3. Configure the network adapter to connect to your preferred test network (e.g., `vboxnet0` with DHCP enabled).
 4. Start the virtual machine.
 5. Watch the VM display: `tty1` will automatically present the retro boot screen and show the dynamically assigned IP address.
+6. Connect to Port 22 with `ssh JOSHUA@<IP>` (Password: `JOSHUA`) to access the game simulation.
 
 ---
 
-## 2. Configuring the Production FLAG
+## 2. TryHackMe Maintenance Architecture & Credentials
+
+TryHackMe requires standard privileged SSH access for platform maintenance, connectivity verification, and VM lifecycle management:
+
+- **Service**: OpenSSH
+- **Port**: `2222`
+- **Username**: `thmadmin`
+- **Privileges**: Sudo administrative access (`/etc/sudoers.d/thmadmin`)
+
+### Maintenance Credential Management
+To maintain security and prevent CTF solution leakage:
+- **Never commit maintenance credentials**: Real maintenance passwords are never committed to version control, public documentation, or repository files.
+- **Offline Provisioning**: The `thmadmin` account password is set during appliance generation via secure offline provisioning.
+- **Retrieval**: When building or staging the VM, the provisioning workflow outputs the generated credentials into a local, uncommitted file (`build/maintenance_credentials.txt`) for the VM deployer to enter into the TryHackMe room upload form.
+
+---
+
+## 3. Configuring the Production FLAG
 
 The production flag is stored strictly outside the source code, SQLite database, and web directory:
 
@@ -40,7 +58,7 @@ PYTHONPATH=/opt/wargame
 
 ---
 
-## 3. Database Initialization
+## 4. Database Initialization
 
 To generate a pristine factory database:
 ```bash

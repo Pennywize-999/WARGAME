@@ -1,5 +1,6 @@
 # Operating System & Large VM Images
 build/
+release/
 *.ova
 *.vdi
 *.vmdk
@@ -26,6 +27,9 @@ app/state/*.db-shm
 *.env
 wargame.env
 !conf/wargame.env.example
+*.credentials
+*maintenance_credentials*
+*.secret
 
 # Host & Private Keys
 *ssh_host_key*
