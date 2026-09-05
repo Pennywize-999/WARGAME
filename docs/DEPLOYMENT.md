@@ -14,7 +14,7 @@ This guide details how to build, configure, and deploy the **WARGAME** CTF appli
 
 ### Running the Pre-built Appliance
 1. Open VirtualBox -> File -> Import Appliance.
-2. Select `WARGAME.ova`.
+2. Select `WARGAME-1.0.0.ova`.
 3. Configure the network adapter to connect to your preferred test network (e.g., `vboxnet0` with DHCP enabled).
 4. Start the virtual machine.
 5. Watch the VM display: `tty1` will automatically present the retro boot screen and show the dynamically assigned IP address.
