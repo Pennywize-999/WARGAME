@@ -2,6 +2,18 @@
 
 All notable changes to the WARGAME CTF release are documented in this file.
 
+## [1.0.2] - 2026-09-06
+### Fixed
+- Corrected challenge documentation to describe WARGAME as a standalone CTF challenge rather than a boot-to-root or privilege-escalation challenge.
+- Standardized documented difficulty to Easy to match the TryHackMe room configuration.
+- Updated the walkthrough and TryHackMe guide to avoid exposing the deployment-specific flag value.
+- Pinned Python dependencies to the production package versions documented by the security review.
+- Enforced exact case-sensitive WOPR password validation in the player authentication flow.
+
+### Changed
+- Updated release documentation references to `WARGAME-1.0.2.ova`.
+- Clarified that TCP/2222 is maintenance-only and TCP/22 is the player-facing WOPR terminal.
+
 ## [1.0.1] - 2026-09-05
 ### Fixed
 - Corrected the pre-built appliance filename in `docs/DEPLOYMENT.md` to `WARGAME-1.0.0.ova`.
