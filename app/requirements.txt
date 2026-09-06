@@ -1,5 +1,5 @@
-﻿fastapi>=0.100.0
-uvicorn[standard]>=0.20.0
-pyftpdlib>=1.5.0
-asyncssh>=2.14.0
-cryptography>=41.0.0
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pyftpdlib==2.2.0
+asyncssh==2.24.0
+cryptography==50.0.1
