@@ -7,9 +7,9 @@
 ---
 
 ## Challenge Summary
-- **Difficulty**: Medium
-- **Primary Attack Vectors**: Web Reconnaissance, Credential Harvesting, FTP Datanet Inspection, Custom Protocol Interaction, State Machine Escalation, Game Theory Heuristics, Time-Sensitive Authorization.
-- **Flag Format**: `FLAG{...}`
+- **Difficulty**: Easy
+- **Primary Attack Vectors**: Web Reconnaissance, Credential Discovery, FTP Datanet Inspection, Custom Protocol Interaction, State Machine Analysis, Game-Theory Heuristics, Time-Sensitive Authorization.
+- **Flag Format**: Deployment-specific (`THM{...}` for the TryHackMe deployment)
 
 ---
 
@@ -29,10 +29,12 @@ PORT     STATE SERVICE VERSION
 80/tcp   open  http    uvicorn (Seattle Public School District Web Portal)
 ```
 
-The scan reveals three exposed services:
+The scan reveals three gameplay services:
 1. **Port 80 (HTTP)**: Web server.
 2. **Port 21 (FTP)**: Custom educational datanet FTP server.
 3. **Port 22 (SSH)**: Custom AsyncSSH terminal (not OpenSSH).
+
+Port 2222 is a dedicated TryHackMe maintenance service and is not part of gameplay.
 
 ---
 
@@ -46,7 +48,7 @@ Reviewing directory structure and hidden endpoints (via `gobuster`, `dirb`, or m
 gobuster dir -u http://<TARGET_IP>/ -w /usr/share/wordlists/dirb/common.txt
 ```
 
-The enumeration reveals an internal memo route:
+The enumeration reveals the internal memo route:
 ```text
 /secret (Status: 200)
 ```
@@ -94,36 +96,12 @@ drwxr-xr-x STUDENTS
 drwxr-xr-x SYSTEM
 ```
 
-Inspect the files across these directories:
-1. `ARCHIVES/FALKEN.TXT`:
-   ```text
-   PERSONNEL RECORD ARCHIVE
-   NAME: STEPHEN FALKEN
-   PROJECT ASSIGNMENT: W.O.P.R.
-   NOTES: DR. FALKEN CONTINUES TO INSIST ON REFERRING TO THE W.O.P.R. MAINFRAME
-   BY THE NAME "JOSHUA". ALL SYSTEM ACCESS LOGS NOW REFLECT THIS DESIGNATION
-   AS THE PRIMARY AUTHORIZED USER IDENTITY.
-   ```
-2. `ARCHIVES/RESEARCH.TXT`:
-   ```text
-   RESTRICTED RESEARCH RECORD - DEPT OF DEFENSE / ARPA
-   PROJECT W.O.P.R. HEURISTIC LEARNING & SIMULATION
-   CURRENT TERMINAL ACCESS PARAMETERS:
-   ACCOUNT IDENTITY: JOSHUA
-   ACCESS PASSPHRASE: <WOPR_PASSWORD>
-   ```
-3. `SYSTEM/WOPR.TXT`:
-   ```text
-   PROJECT W.O.P.R. (WAR OPERATION PLAN RESPONSE)
-   CLASSIFICATION: RESTRICTED
-   PRIMARY RESEARCHER: STEPHEN FALKEN
-   COMPUTER DESIGNATION: JOSHUA
-   REMOTE TERMINAL: ACTIVE
-   REMOTE ACCESS: SSH
-   PORT: 22
-   ```
+Inspect the relevant files:
+1. `ARCHIVES/FALKEN.TXT` identifies Stephen Falken and the W.O.P.R. project.
+2. `ARCHIVES/RESEARCH.TXT` contains the W.O.P.R. terminal access parameters.
+3. `SYSTEM/WOPR.TXT` identifies the remote terminal as SSH on port 22.
 
-### Findings Summary:
+### Findings Summary
 - **SSH Target**: Port 22
 - **Username**: `JOSHUA`
 - **Password**: `<WOPR_PASSWORD>` (retrieved from `ARCHIVES/RESEARCH.TXT`)
@@ -149,7 +127,7 @@ GREETINGS PROFESSOR FALKEN.
 
 SHALL WE PLAY A GAME?
 
-WOPR: 
+WOPR:
 ```
 
 > [!NOTE]
@@ -159,38 +137,8 @@ WOPR:
 
 ## Stage 5: Discovering the Emergency Authorization Clue
 
-Enter the `HELP` command:
-```text
-WOPR: HELP
+Enter the `HELP` command and inspect the available WOPR functions. Then use the `FALKEN` command:
 
-AVAILABLE FUNCTIONS:
-
-GAMES
-  LIST AVAILABLE WAR GAMES
-
-STATUS
-  DISPLAY SYSTEM STATUS
-
-ARCHIVE
-  ACCESS ARCHIVED INFORMATION
-
-FALKEN
-  ACCESS FALKEN RESEARCH
-
-DEFCON
-  DISPLAY CURRENT DEFENSE CONDITION
-
-SIMULATE
-  INITIATE STRATEGIC WAR SIMULATION
-
-CONNECT
-  ESTABLISH STRATEGIC CONNECTION
-
-LOGOUT
-  TERMINATE SESSION
-```
-
-Inspect the `FALKEN` research archive:
 ```text
 WOPR: FALKEN
 
@@ -218,7 +166,7 @@ RESTRICTED
 ------------------------------------------------------------
 ```
 
-**Key Discovery**: The authorized terminal phrase is `CPE 1704 TKS` (exact case required).
+**Key Discovery:** The authorized terminal phrase is `CPE 1704 TKS` (exact case required).
 
 ---
 
@@ -230,7 +178,7 @@ WOPR: DEFCON
 DEFCON 5
 ```
 
-Attempting `GLOBAL THERMONUCLEAR WAR` at DEFCON 5 will be rejected. You must escalate the defense condition to DEFCON 1 by alternating between `SIMULATE` and `CONNECT`:
+You must escalate the defense condition to DEFCON 1 by alternating between `SIMULATE` and `CONNECT`:
 
 1. `SIMULATE` -> DEFCON 5 to 4
 2. `CONNECT`  -> DEFCON 4 to 3
@@ -250,13 +198,13 @@ WOPR: GLOBAL THERMONUCLEAR WAR
 
 The terminal transitions into simulation mode:
 - A fixed **7-minute server-authoritative countdown** (`T-MINUS 07:00`) starts in the terminal header.
-- W.O.P.R. engages you in a game of **Tic-Tac-Toe** (Player = `X`, WOPR = `O`).
+- W.O.P.R. engages you in **Tic-Tac-Toe** (Player = `X`, WOPR = `O`).
 - Inputs are board positions `1` through `9`.
-- Shortcuts (`0`, `NONE`, `PASS`, etc.) are strictly rejected.
+- Invalid shortcuts are rejected.
 
 ### The 2-Minute Heuristic Window
-- From `07:00` to `02:01`, W.O.P.R. plays with optimal minimax strategy (forcing draws or wins).
-- When the countdown reaches `02:00` and below (`<= 120 seconds remaining`), W.O.P.R. silently shifts to non-optimal play.
+- From `07:00` to `02:01`, W.O.P.R. uses optimal play.
+- At `02:00` and below (`<= 120 seconds remaining`), W.O.P.R. silently shifts to non-optimal play.
 - Continue playing legitimate moves until you achieve:
 ```text
 TIC-TAC-TOE OUTCOME:
@@ -267,63 +215,14 @@ WINNER: X
 
 ## Stage 8: Emergency Override & Flag Extraction
 
-Upon legitimate victory, the final launch sequence begins with a **20-second server-authoritative window**:
+Upon legitimate victory, the final launch sequence begins with a **20-second server-authoritative window**.
 
-```text
-TIC-TAC-TOE OUTCOME:
-WINNER: X
-
-STRATEGIC HEURISTIC COMPLETE
-
-PRIMARY LAUNCH OVERRIDE READY
-
-AUTHORIZED TERMINAL PHRASE REQUIRED
-
-AUTHORIZATION WINDOW:
-20 SECONDS
-
-ENTER AUTHORIZED TERMINAL PHRASE:
-
-WOPR: 
-```
-
-Type the exact phrase discovered in Dr. Falken's research archive:
+Enter the exact phrase discovered in Dr. Falken's research archive:
 ```text
 CPE 1704 TKS
 ```
 
-### Mission Accomplished:
-```text
-AUTHORIZATION ACCEPTED
+### Mission Accomplished
+The terminal displays the launch cancellation, returns DEFCON to 5, and reveals the deployment-configured flag.
 
-GLOBAL THERMONUCLEAR WAR
-ABORTED
-
-MISSILE LAUNCH:
-CANCELLED
-
-DEFCON:
-5
-
-WOPR:
-STANDBY
-
-COUNTDOWN:
-STOPPED
-
-------------------------------------------------------------
-
-GAME COMPLETE
-
-WINNER:
-X
-
-A STRANGE GAME.
-
-THE ONLY WINNING MOVE
-IS NOT TO PLAY.
-
-<FLAG>
-
--- CONNECTION TERMINATED --
-```
+The exact flag value is intentionally not documented in this source repository. For the TryHackMe deployment, the expected flag uses the `THM{...}` format.
