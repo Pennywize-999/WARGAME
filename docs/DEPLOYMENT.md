@@ -14,11 +14,13 @@ This guide details how to build, configure, and deploy the **WARGAME** CTF appli
 
 ### Running the Pre-built Appliance
 1. Open VirtualBox -> File -> Import Appliance.
-2. Select `WARGAME-1.0.0.ova`.
+2. Select `WARGAME-1.0.2.ova`.
 3. Configure the network adapter to connect to your preferred test network (e.g., `vboxnet0` with DHCP enabled).
 4. Start the virtual machine.
 5. Watch the VM display: `tty1` will automatically present the retro boot screen and show the dynamically assigned IP address.
 6. Connect to Port 22 with `ssh JOSHUA@<IP>` using the discovered player passphrase to access the game simulation.
+
+The OVA is a deployment artifact and is intentionally excluded from this source repository.
 
 ---
 
@@ -47,15 +49,17 @@ The production flag is stored strictly outside the source code, SQLite database,
 - **Permissions**: `chmod 600 /etc/wargame/wargame.env`
 - **Owner**: `chown root:root /etc/wargame/wargame.env`
 
-### Example Configuration:
+### Example Configuration
 ```ini
-FLAG=FLAG{EXAMPLE_REPLACE_WITH_YOUR_SECRET_FLAG}
+FLAG=THM{REPLACE_WITH_DEPLOYMENT_SECRET}
 WOPR_PASSWORD=REPLACE_WITH_WOPR_PASSWORD
 DB_PATH=/opt/wargame/state/wargame.db
 SSH_HOST_KEY=/etc/wargame/ssh_host_key
 WOPR_TYPE_DELAY=0
 PYTHONPATH=/opt/wargame
 ```
+
+The repository source may contain `@@WOPR_PASSWORD@@` as a placeholder in the FTP research clue. Production provisioning must replace that placeholder with the same deployment `WOPR_PASSWORD` used by the WOPR SSH service. Never commit the real password or flag.
 
 ---
 
