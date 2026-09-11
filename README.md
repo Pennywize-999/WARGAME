@@ -51,7 +51,6 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment and configu
 
 ## Documentation Index
 
-- [Walkthrough (SPOILERS)](docs/WALKTHROUGH.md) - Official step-by-step CTF solution guide.
 - [TryHackMe Room Guide](docs/TRYHACKME.md) - Room structure, task breakdown, hints, and platform considerations.
 - [System Architecture](docs/ARCHITECTURE.md) - Technical architecture, systemd services, and isolation model.
 - [Deployment Guide](docs/DEPLOYMENT.md) - Build, deployment, and configuration instructions.
